@@ -60,8 +60,6 @@ viscircles(centerscap, radiicap,'EdgeColor','b');
 
 
 
-
-
 figure;
 imagesc(image);
 axis equal;axis off;
@@ -118,3 +116,7 @@ axis equal;axis off;
 
 radiicap = 10*ones(size(radiicap));
 viscircles(centerscap, radiicap,'EdgeColor','b');
+
+cap_img = vc_sq;
+sketch_img = image;
+save('centers_cap_sketch.mat','centerscap',"centerssketch", "cap_img","sketch_img");
