@@ -44,11 +44,12 @@ centerssketch(:,1) = xsR;
 centerssketch(:,2) = ysR;
 
 figure;
-imagesc(cap_img); colormap gray;hold on;title('cap with warped sketch pts');
+imagesc(cap_img); colormap gray;hold on;%title('cap with warped sketch pts');
 plot(centerscap(:,1),centerscap(:,2),'ro');
-plot(xsR,ysR,'y+');
+plot(xsR,ysR,'y+');axis off;
 axis equal;
-
+exportgraphics(gca,"cap_markers.gif","Append",true)
+close all;
 
 lambda = 100000;
 
@@ -75,10 +76,11 @@ for kk=1:NIT
     centerssketch(:,2) = ysR;
 
     figure;
-    imagesc(cap_img); colormap gray;hold on;title(sprintf('cap with warped sketch pts: iter %d',kk));
+    imagesc(cap_img); colormap gray;hold on;%title(sprintf('cap with warped sketch pts: iter %d',kk));
     plot(centerscap(:,1),centerscap(:,2),'ro');
-    plot(xsR,ysR,'y+');
+    plot(xsR,ysR,'y+');axis off;
     axis equal;
-
+    exportgraphics(gca,"cap_markers.gif","Append",true)
+    close all;
 end
 

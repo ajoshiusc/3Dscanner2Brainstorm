@@ -9,6 +9,9 @@ load ../generated_structures/demo_structures/step_4/head_surface.mat
 set(gcf, 'Visible', 'on');
 imshow(image, cmap);
 
+se = strel('disk',3);
+im2 = imerode(image,se);
+
 NPTS = 512;
 
 
