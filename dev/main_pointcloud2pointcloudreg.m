@@ -84,3 +84,58 @@ for kk=1:NIT
     close all;
 end
 
+
+%% Map contact locations to the 3d cap
+load('head_surf.mat');
+
+
+NPTS = length(cap_img);
+ll=linspace(-1,1,NPTS);
+[X1,Y1]=meshgrid(ll,ll);
+
+u_sketch = interp2(X1,xsR,ysR);
+v_sketch = interp2(Y1,xsR,ysR);
+
+(2*xsR)/NPTS -1
+(2*ysR)/NPTS -1
+
+% map from flat space to 3d cap
+
+centerscapuv = 2*centerscap/NPTS - 1;
+
+u_cap=head_surf.v;
+v_cap=head_surf.u;
+
+
+figure;hold on;title('pts identified on cap flat map');
+patch('faces',head_surf.faces,'vertices',[u_cap,v_cap],'facevertexcdata',head_surf.vcolor,'facecolor','interp','edgecolor','none');
+plot3(centerscapuv(:,1),centerscapuv(:,2),0*centerscapuv(:,2),'yo');
+viscircles(centerscapuv, 0.05*ones(length(centerscap),1),'EdgeColor','b');
+axis equal; axis off; camlight; material dull;view(70,30);axis tight;view(0,90);
+
+
+cap_points(:,1)=griddata(u_cap,v_cap,head_surf.vertices(:,1),centerscapuv(:,1),centerscapuv(:,2));
+cap_points(:,2)=griddata(u_cap,v_cap,head_surf.vertices(:,2),centerscapuv(:,1),centerscapuv(:,2));
+cap_points(:,3)=griddata(u_cap,v_cap,head_surf.vertices(:,3),centerscapuv(:,1),centerscapuv(:,2));
+
+
+figure;hold on;title('pts identified on cap');
+patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',0.5*ones(size(head_surf.vertices)),'facecolor','interp','edgecolor','none');
+plot3(cap_points(:,1),cap_points(:,2),cap_points(:,3),'yo');
+axis equal; axis off; camlight; material dull;view(70,30);axis tight;
+
+
+sketch_points(:,1)=griddata(u_cap,v_cap,head_surf.vertices(:,1),u_sketch,v_sketch);
+sketch_points(:,2)=griddata(u_cap,v_cap,head_surf.vertices(:,2),u_sketch,v_sketch);
+sketch_points(:,3)=griddata(u_cap,v_cap,head_surf.vertices(:,3),u_sketch,v_sketch);
+
+figure;hold on;title('pts mapped from sketch to cap');
+patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',0.5*ones(size(head_surf.vertices)),'facecolor','interp','edgecolor','none');
+plot3(sketch_points(:,1),sketch_points(:,2),sketch_points(:,3),'yo');
+axis equal; axis off; camlight; material dull;view(70,30);axis tight;
+
+
+
+
+
+

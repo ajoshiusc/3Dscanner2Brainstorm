@@ -123,3 +123,6 @@ viscircles(centerscap, radiicap,'EdgeColor','b');
 cap_img = vc_sq;
 sketch_img = image;
 save('centers_cap_sketch.mat','centerscap',"centerssketch", "cap_img","sketch_img");
+
+save('head_surf.mat','head_surf');
+
