@@ -3,7 +3,7 @@
 clc;clear all;close all;
 restoredefaultpath;
 addpath('/home/ajoshi/Projects/3Dscanner2Brainstorm');
-load ../generated_structures/demo_structures/step_4/head_surface.mat
+load /home/ajoshi/Projects/3Dscanner2Brainstorm/head_surface2.mat %../generated_structures/demo_structures/step_1/head_surface.mat
 % Displays channel layout of supported 64ch
 [image, cmap] = imread('../channel_layouts/waveguard_layout_064ch.png');
 set(gcf, 'Visible', 'on');

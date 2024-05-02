@@ -3,17 +3,32 @@
 clear all;close all;clc;
 
 load("centers_cap_sketch.mat")
-NIT=20;
+NIT=100;
 
 step_size=.05;
 lap_reg=8;
+colrs = jet(size(centerssketch,1));
+colrs = colrs(randperm(size(centerssketch,1)),:);
 
+
+out_gif_file = "cap_markers3.gif";
+labelled_cap_gif_file = "labelled_cap_markers3.gif";
+delete(out_gif_file);
+delete(labelled_cap_gif_file);
 
 figure;
 imagesc(sketch_img); colormap gray;hold on;title('sketch');
 plot(centerssketch(:,1),centerssketch(:,2),'r*');
 axis equal;
 
+diameter=10;
+figure; hold on;
+%imagesc(sketch_img); colormap gray;hold on;title('sketch');
+%h = plot(centerssketch(:,1),centerssketch(:,2),'yo');%h=fill(centerssketch(:,1),centerssketch(:,2),'r');
+for ind=1:size(centerssketch,1)
+    rectangle('Position',[centerssketch(ind,:)-diameter/2, diameter, diameter],'Curvature',[1,1], 'FaceColor', colrs(ind,:), 'EdgeColor',  colrs(ind,:));
+end
+axis equal; axis off;axis tight;
 
 
 figure;
@@ -34,7 +49,7 @@ cap_pts = [122,253;258,66;466,250;260,436];%[253,390;250,46;66,254;436,252];
 
 figure;
 imagesc(cap_img); colormap gray;hold on;title('cap with orig sketch pts');
-plot(centerscap(:,1),centerscap(:,2),'ro');
+%plot(centerscap(:,1),centerscap(:,2),'ro');
 
 plot(centerssketch(:,1),centerssketch(:,2),'y+');
 axis equal;
@@ -45,10 +60,19 @@ centerssketch(:,2) = ysR;
 
 figure;
 imagesc(cap_img); colormap gray;hold on;%title('cap with warped sketch pts');
-plot(centerscap(:,1),centerscap(:,2),'ro');
-plot(xsR,ysR,'y+');axis off;
-axis equal;
-exportgraphics(gca,"cap_markers.gif","Append",true)
+%plot(centerscap(:,1),centerscap(:,2),'ro');
+%plot(xsR,ysR,'y+');axis off;
+diameter=5;
+centerssketch = max(min(centerssketch,512-15),15);
+for ind=1:size(centerssketch,1)
+    rectangle('Position',[centerssketch(ind,:)-diameter/2, diameter, diameter],'Curvature',[1,1], 'FaceColor', colrs(ind,:), 'EdgeColor',  colrs(ind,:));
+end
+axis equal; axis off;%axis tight;
+pause(.5);
+%axis equal;
+for j=1:30
+exportgraphics(gca,out_gif_file,"Append",true);
+end
 close all;
 
 lambda = 100000;
@@ -72,15 +96,32 @@ for kk=1:NIT
     [warp,L,LnInv,bendE] = tpsGetWarp(lambda, centerssketch(vec_atlas_pts,1)', centerssketch(vec_atlas_pts,2)', centerscap(ind,1)', centerscap(ind,2)' );
 
     [xsR,ysR] = tpsInterpolate( warp, centerssketch(:,1)', centerssketch(:,2)', [0]);
-    centerssketch(:,1) = xsR;
-    centerssketch(:,2) = ysR;
+
+    if kk<NIT/2
+        centerssketch(:,1) = 0.9*centerssketch(:,1) + 0.1*xsR;
+        centerssketch(:,2) = 0.9*centerssketch(:,2) + 0.1*ysR;
+    else
+        centerssketch(:,1) = xsR;
+        centerssketch(:,2) = ysR;
+    end
 
     figure;
     imagesc(cap_img); colormap gray;hold on;%title(sprintf('cap with warped sketch pts: iter %d',kk));
-    plot(centerscap(:,1),centerscap(:,2),'ro');
-    plot(xsR,ysR,'y+');axis off;
-    axis equal;
-    exportgraphics(gca,"cap_markers.gif","Append",true)
+    %plot(centerscap(:,1),centerscap(:,2),'ro');
+
+    diameter=5;
+    centerssketch = max(min(centerssketch,512-15),15);
+    for ind=1:size(centerssketch,1)
+        rectangle('Position',[centerssketch(ind,:)-diameter/2, diameter, diameter],'Curvature',[1,1], 'FaceColor', colrs(ind,:), 'EdgeColor',  colrs(ind,:));
+    end
+    axis equal; axis off;%axis tight;
+    pause(.5);
+
+
+
+    %plot(xsR,ysR,'y+');axis off;
+    %axis equal;
+    exportgraphics(gca,out_gif_file,"Append",true)
     close all;
 end
 
@@ -135,12 +176,35 @@ figure;hold on;title('pts mapped from sketch to cap');
 patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',head_surf.vcolor,'facecolor','interp','edgecolor','none');
 %plot3(sketch_points(:,1),sketch_points(:,2),sketch_points(:,3),'yo');
 %0.5*ones(size(head_surf.vertices))
-mysphere(sketch_points,3,'y',10);
 
-axis equal; axis off; camlight; material dull;view(70,30);axis tight;
+for ind=1:size(sketch_points,1)
+    mysphere(sketch_points(ind,:),3,colrs(ind,:),10);
+end
+
+axis equal; axis off; material dull;view(70,30);camlight; axis tight;
 
 
 
+
+
+for angle=1:360
+    figure;hold on;%title('pts mapped from sketch to cap');
+    patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',head_surf.vcolor,'facecolor','interp','edgecolor','none');
+    %plot3(sketch_points(:,1),sketch_points(:,2),sketch_points(:,3),'yo');
+    %0.5*ones(size(head_surf.vertices))
+
+    for ind=1:size(sketch_points,1)
+        mysphere(sketch_points(ind,:),3,colrs(ind,:),10);
+    end
+
+    axis equal; axis off; 
+    material dull;view(angle,0);camlight; %axis tight;
+    pause(0.5);
+
+    exportgraphics(gca,labelled_cap_gif_file,"Append",true);
+
+    close all;
+end
 
 
 
