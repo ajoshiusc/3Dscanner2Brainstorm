@@ -1,5 +1,4 @@
-%||AUM||
-%||Shree Ganeshaya Namaha||
+
 clear all;close all;clc;
 
 load("centers_cap_sketch.mat")
@@ -11,8 +10,8 @@ colrs = jet(size(centerssketch,1));
 colrs = colrs(randperm(size(centerssketch,1)),:);
 
 
-out_gif_file = "cap_markers3.gif";
-labelled_cap_gif_file = "labelled_cap_markers3.gif";
+out_gif_file = "cap_markers4.gif";
+labelled_cap_gif_file = "labelled_cap_markers4.gif";
 delete(out_gif_file);
 delete(labelled_cap_gif_file);
 
@@ -21,15 +20,6 @@ imagesc(sketch_img); colormap gray;hold on;title('sketch');
 plot(centerssketch(:,1),centerssketch(:,2),'r*');
 axis equal;
 
-diameter=10;
-figure; hold on;
-%imagesc(sketch_img); colormap gray;hold on;title('sketch');
-%h = plot(centerssketch(:,1),centerssketch(:,2),'yo');%h=fill(centerssketch(:,1),centerssketch(:,2),'r');
-for ind=1:size(centerssketch,1)
-    rectangle('Position',[centerssketch(ind,:)-diameter/2, diameter, diameter],'Curvature',[1,1], 'FaceColor', colrs(ind,:), 'EdgeColor',  colrs(ind,:));
-end
-axis equal; axis off;axis tight;
-
 
 figure;
 imagesc(cap_img); colormap gray;hold on;title('cap');
@@ -37,9 +27,22 @@ plot(centerscap(:,1),centerscap(:,2),'b+');
 axis equal;
 
 % will warp sketch to cap
-
+%% This needs to be manually edited to match 4 corresponding points sketch and cap image
 sketch_pts = [86,254;266,112;446,254;266,396];% [254,426;254,67;112,246;396,246];
 cap_pts = [122,253;258,66;466,250;260,436];%[253,390;250,46;66,254;436,252];
+%%
+
+diameter=10;
+figure; hold on;
+%imagesc(sketch_img); colormap gray;hold on;title('sketch');
+%h = plot(centerssketch(:,1),centerssketch(:,2),'yo');%h=fill(centerssketch(:,1),centerssketch(:,2),'r');
+for ind=1:size(centerssketch,1)
+    rectangle('Position',[centerssketch(ind,:)-diameter/2, diameter, diameter],'Curvature',[1,1], 'FaceColor', colrs(ind,:), 'EdgeColor',  colrs(ind,:));
+end
+axis equal; axis tight;
+
+
+%%
 
 [warp,L,LnInv,bendE] = tpsGetWarp(10, sketch_pts(:,1)', sketch_pts(:,2)', cap_pts(:,1)', cap_pts(:,2)' );
  

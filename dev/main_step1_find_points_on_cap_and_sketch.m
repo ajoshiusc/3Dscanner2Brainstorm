@@ -3,10 +3,12 @@
 clc;clear all;close all;
 restoredefaultpath;
 addpath('/home/ajoshi/Projects/3Dscanner2Brainstorm');
-load /home/ajoshi/Projects/3Dscanner2Brainstorm/head_surface2.mat %../generated_structures/demo_structures/step_1/head_surface.mat
+load ../generated_structures/demo_structures/step_4/head_surface.mat
 % Displays channel layout of supported 64ch
 [image, cmap] = imread('../channel_layouts/waveguard_layout_064ch.png');
 set(gcf, 'Visible', 'on');
+
+figure;title('Sketch');
 imshow(image, cmap);
 
 se = strel('disk',3);
@@ -14,15 +16,12 @@ im2 = imerode(image,se);
 
 NPTS = 512;
 
-
-% Number of positions (electrodes) to localize.
-numLoc = 64;
-
+% Flatten the mesh using Yash's routine
 head_surf = mesh_flatten(head_surface);
 clear head_surface
 
 
-figure;
+figure;title('head surface');
 hs.figure = patch('Vertices', head_surf.vertices, 'Faces', head_surf.faces, 'FaceVertexCData', head_surf.vcolor, 'FaceColor', 'interp','edgecolor','none');
 axis equal;axis off;axis tight;
 
@@ -99,7 +98,7 @@ axis equal;axis off;
 CC = bwconncomp(image);
 S = regionprops(CC,'Centroid');
 
-centers = zeros(length(S),2)
+centers = zeros(length(S),2);
 for i = 1:length(S)
     centers(i,:)=S(i).Centroid;
 end
