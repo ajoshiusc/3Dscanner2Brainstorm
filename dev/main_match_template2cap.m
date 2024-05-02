@@ -40,8 +40,8 @@ axis equal;axis off;axis tight;
 
 ll=linspace(-1,1,NPTS);
 [X1,Y1]=meshgrid(ll,ll);
-X=-Y1;
-Y=X1;
+X=X1;
+Y=Y1;
 vc_sq = 0*X;
 vc_sq(:) = griddata(head_surf.u(1:end),head_surf.v(1:end),grayness,X(:),Y(:),'nearest');
 
@@ -61,7 +61,7 @@ metriccap = metric;
 
 viscircles(centerscap, radiicap,'EdgeColor','b');
 
-
+image = imrotate(image,-90);
 
 figure;
 imagesc(image);

@@ -23,8 +23,8 @@ axis equal;
 
 % will warp sketch to cap
 
-sketch_pts = [254,426;254,67;112,246;396,246];
-cap_pts = [253,390;250,46;66,254;436,252];
+sketch_pts = [86,254;266,112;446,254;266,396];% [254,426;254,67;112,246;396,246];
+cap_pts = [122,253;258,66;466,250;260,436];%[253,390;250,46;66,254;436,252];
 
 [warp,L,LnInv,bendE] = tpsGetWarp(10, sketch_pts(:,1)', sketch_pts(:,2)', cap_pts(:,1)', cap_pts(:,2)' );
  
@@ -103,8 +103,8 @@ v_sketch = interp2(Y1,xsR,ysR);
 
 centerscapuv = 2*centerscap/NPTS - 1;
 
-u_cap=head_surf.v;
-v_cap=head_surf.u;
+u_cap=head_surf.u;
+v_cap=head_surf.v;
 
 
 figure;hold on;title('pts identified on cap flat map');
@@ -120,8 +120,10 @@ cap_points(:,3)=griddata(u_cap,v_cap,head_surf.vertices(:,3),centerscapuv(:,1),c
 
 
 figure;hold on;title('pts identified on cap');
-patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',0.5*ones(size(head_surf.vertices)),'facecolor','interp','edgecolor','none');
-plot3(cap_points(:,1),cap_points(:,2),cap_points(:,3),'yo');
+patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',head_surf.vcolor,'facecolor','interp','edgecolor','none');
+%plot3(cap_points(:,1),cap_points(:,2),cap_points(:,3),'yo');
+mysphere(cap_points,3,'w',10);
+
 axis equal; axis off; camlight; material dull;view(70,30);axis tight;
 
 
@@ -130,9 +132,13 @@ sketch_points(:,2)=griddata(u_cap,v_cap,head_surf.vertices(:,2),u_sketch,v_sketc
 sketch_points(:,3)=griddata(u_cap,v_cap,head_surf.vertices(:,3),u_sketch,v_sketch);
 
 figure;hold on;title('pts mapped from sketch to cap');
-patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',0.5*ones(size(head_surf.vertices)),'facecolor','interp','edgecolor','none');
-plot3(sketch_points(:,1),sketch_points(:,2),sketch_points(:,3),'yo');
+patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',head_surf.vcolor,'facecolor','interp','edgecolor','none');
+%plot3(sketch_points(:,1),sketch_points(:,2),sketch_points(:,3),'yo');
+%0.5*ones(size(head_surf.vertices))
+mysphere(sketch_points,3,'y',10);
+
 axis equal; axis off; camlight; material dull;view(70,30);axis tight;
+
 
 
 
