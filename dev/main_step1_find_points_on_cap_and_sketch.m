@@ -1,5 +1,4 @@
-%AUM
-%Shree Ganeshaya Namaha
+
 clc;clear all;close all;
 restoredefaultpath;
 addpath('/home/ajoshi/Projects/3Dscanner2Brainstorm');
@@ -34,6 +33,11 @@ axis equal;axis off;axis tight;
 
 figure;
 hs.figure = patch('Vertices', [head_surf.u,head_surf.v], 'Faces', head_surf.faces, 'FaceVertexCData', grayness, 'FaceColor', 'interp','edgecolor','none');
+axis equal;axis off;axis tight;
+
+
+figure;
+hs.figure = patch('Vertices', [head_surf.u,head_surf.v], 'Faces', head_surf.faces, 'FaceVertexCData', head_surf.vcolor, 'FaceColor', 'interp','edgecolor','none');
 axis equal;axis off;axis tight;
 
 
