@@ -2,18 +2,26 @@
 clc;clear all;close all;
 restoredefaultpath;
 addpath('/home/ajoshi/Projects/3Dscanner2Brainstorm');
-load /home/ajoshi/Downloads/head_surf_low.mat
-head_surface = head_surf_joshi
+%load /home/ajoshi/Downloads/head_surf_low.mat
+%load /home/ajoshi/Projects/3Dscanner2Brainstorm/head_surf_256_2_chinmay.mat
+load /home/ajoshi/head_surface256k_yash2.mat
+%load /home/ajoshi/Downloads/head_surf_chris_256.mat
+head_surface=cut_surf;
+head_surface.pos = head_surface.vertices;
+head_surface.tri = head_surface.faces;
+head_surface.color = head_surface.color;
+%head_surface = head_surf;
+%head_surface = head_surf_joshi
 %load ../generated_structures/demo_structures/step_4/head_surface.mat
 % Displays channel layout of supported 64ch
-[image, cmap] = imread('../channel_layouts/waveguard_layout_064ch.png');
+[image, cmap] = imread('/home/ajoshi/Projects/3Dscanner2Brainstorm/dev/256_sketch5.jpg');
 set(gcf, 'Visible', 'on');
 
 figure;title('Sketch');
 imshow(image, cmap);
 
 se = strel('disk',3);
-im2 = imerode(image,se);
+im2 = image;%imerode(image,se);
 
 NPTS = 512;
 
@@ -58,7 +66,7 @@ imwrite(vc_sq,'cap.png');
 
 
 
-[centers, radii, metric] = imfindcircles(vc_sq,[5 155]);
+[centers, radii, metric] = imfindcircles(vc_sq,[3 555]);
 
 centerscap = centers; 
 radiicap = radii;
@@ -66,16 +74,19 @@ metriccap = metric;
 
 viscircles(centerscap, radiicap,'EdgeColor','b');
 
-image = imrotate(image,-90);
+%image = imrotate(image,-90);
 
 figure;
 imagesc(image);
 axis equal;axis off;
 
 imwrite(image,'sketch.png');
-[centers, radii, metric] = imfindcircles(image,[5 2*155]);
-centerssketch = centers; 
-radiisketch = radii;
+
+load('256_pts.mat');
+
+[centers, radii, metric] = imfindcircles(image,[1 5005]);
+centerssketch = 256*(1.1+pts);%centers; 
+radiisketch = 10*ones(length(pts),1); % radii; 
 metricsketch = metric;
 
 viscircles(centerssketch, radiisketch,'EdgeColor','b');
@@ -104,13 +115,13 @@ axis equal;axis off;
 CC = bwconncomp(image);
 S = regionprops(CC,'Centroid');
 
-centers = zeros(length(S),2);
-for i = 1:length(S)
-    centers(i,:)=S(i).Centroid;
-end
+%centers = zeros(length(S),2);
+%for i = 1:length(S)
+%    centers(i,:)=S(i).Centroid;
+%end
 
 %[centers, radii, metric] = imfindcircles(image,[5 255]);
-centerssketch = centers; 
+%centerssketch = centers; 
 radiisketch = 10*ones(length(S),1);
 %metricsketch = metric;
 

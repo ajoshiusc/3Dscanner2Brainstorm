@@ -10,8 +10,8 @@ colrs = jet(size(centerssketch,1));
 colrs = colrs(randperm(size(centerssketch,1)),:);
 
 
-out_gif_file = "cap_markers4.gif";
-labelled_cap_gif_file = "labelled_cap_markers4.gif";
+out_gif_file = "cap_markers_256.gif";
+labelled_cap_gif_file = "labelled_cap_markers_256.gif";
 delete(out_gif_file);
 delete(labelled_cap_gif_file);
 
@@ -28,8 +28,11 @@ axis equal;
 
 % will warp sketch to cap
 %% This needs to be manually edited to match 4 corresponding points sketch and cap image
-sketch_pts = [86,254;266,112;446,254;266,396];% [254,426;254,67;112,246;396,246];
-cap_pts = [122,253;258,66;466,250;260,436];%[253,390;250,46;66,254;436,252];
+%sketch_pts = [86,254;266,112;446,254;266,396];% [254,426;254,67;112,246;396,246];
+%cap_pts = [122,253;258,66;466,250;260,436];%[253,390;250,46;66,254;436,252];
+
+sketch_pts = [1.9,280;195,83;365,77;498,284;455,469;179,442];%[73,180; 73,379; 455,470; 463,97];
+cap_pts = [44,266;187,57;335,38;466,251;427,446;174,433];%[70,153; 99,354; 422,429; 440,86];
 %%
 
 diameter=10;
@@ -78,7 +81,7 @@ exportgraphics(gca,out_gif_file,"Append",true);
 end
 close all;
 
-lambda = 100000;
+lambda = .1 ; %100000;
 
 for kk=1:NIT
     fprintf('.');
@@ -110,7 +113,7 @@ for kk=1:NIT
 
     figure;
     imagesc(cap_img); colormap gray;hold on;%title(sprintf('cap with warped sketch pts: iter %d',kk));
-    %plot(centerscap(:,1),centerscap(:,2),'ro');
+    plot(centerscap(:,1),centerscap(:,2),'ro');
 
     diameter=5;
     centerssketch = max(min(centerssketch,512-15),15);
@@ -122,8 +125,8 @@ for kk=1:NIT
 
 
 
-    %plot(xsR,ysR,'y+');axis off;
-    %axis equal;
+    plot(xsR,ysR,'y+');axis off;
+    axis equal;
     exportgraphics(gca,out_gif_file,"Append",true)
     close all;
 end
@@ -166,7 +169,7 @@ cap_points(:,3)=griddata(u_cap,v_cap,head_surf.vertices(:,3),centerscapuv(:,1),c
 figure;hold on;title('pts identified on cap');
 patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',head_surf.vcolor,'facecolor','interp','edgecolor','none');
 %plot3(cap_points(:,1),cap_points(:,2),cap_points(:,3),'yo');
-mysphere(cap_points,.003,'w',10);
+mysphere(cap_points,3,'w',10);
 
 axis equal; axis off; camlight; material dull;view(70,30);axis tight;
 
@@ -181,7 +184,7 @@ patch('faces',head_surf.faces,'vertices',head_surf.vertices,'facevertexcdata',he
 %0.5*ones(size(head_surf.vertices))
 
 for ind=1:size(sketch_points,1)
-    mysphere(sketch_points(ind,:),.003,colrs(ind,:),10);
+    mysphere(sketch_points(ind,:),3,colrs(ind,:),10);
 end
 
 axis equal; axis off; material dull;view(70,30);camlight; axis tight;
@@ -197,7 +200,7 @@ for angle=1:360
     %0.5*ones(size(head_surf.vertices))
 
     for ind=1:size(sketch_points,1)
-        mysphere(sketch_points(ind,:),.003,colrs(ind,:),10);
+        mysphere(sketch_points(ind,:),3,colrs(ind,:),10);
     end
 
     axis equal; axis off; 

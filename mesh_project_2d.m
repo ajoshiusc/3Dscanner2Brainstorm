@@ -1,4 +1,4 @@
-function hs = mesh_project_2d(head_surface)
+function [hs,cut_surf] = mesh_project_2d(head_surface)
 
 % MESH_PROJECT_2D visualizes a 3D surface mesh - described by triangles and
 % consist of a structure with the fields "pos", "tri", and "color" - as a
@@ -46,4 +46,9 @@ set(hs.figure, 'FaceVertexCData', color, 'FaceColor', 'interp');
 set(hs.figure, 'EdgeColor', 'none');
 axis equal
 
+cut_surf.faces=tri;
+cut_surf.vertices=pos;
+cut_surf.color=color;
+cut_surf.u=X;
+cut_surf.v=Y;
 return
